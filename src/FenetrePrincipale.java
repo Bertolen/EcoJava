@@ -22,9 +22,12 @@ public class FenetrePrincipale extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Création du panneau principal
-		pp = new PanneauPrincipal();
+		pp = Pondeuse.RecupPanneau();
 		// Ajout du panneau principal à la fenêtre
 		this.add(pp);
+		
+		// on créé un être pour le test
+		Pondeuse.PondreEtre(100, 100, Pondeuse.Espece.HERBE);
 		
 		// Et enfin, on rends la fenêtre visible
 		this.setVisible(true);

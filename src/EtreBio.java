@@ -6,15 +6,35 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
-public class EtreBio extends JComponent {
+public abstract class EtreBio extends JComponent {
 
 	int x = 0;
 	int y = 0;
-	
+	float gaugeRepro = 0;
+	private Timer timer;
 
 	public EtreBio(){
+		super();
+		
+		x = 0;
+		y = 0;
+
 		// Initialisation du Timer pour rafraichir le panneau
-		Timer timer = new Timer(50, new ActionListener(){
+		initTimer();
+	}
+
+	public EtreBio(int _x, int _y){
+		super();
+		x = _x;
+		y = _y;
+
+		// Initialisation du Timer pour rafraichir le panneau
+		initTimer();
+	}
+
+	// Initialisation du Timer pour rafraichir le panneau
+	private void initTimer() {
+		timer = new Timer(50, new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				Tick();
 			}
@@ -30,8 +50,20 @@ public class EtreBio extends JComponent {
 		return y;
 	}
 	
-	private void Tick() {
-		x += 5;
-		y += 5;
+	protected void Tick() {
+		Reproduction();	
+	}
+	
+	protected void Reproduction(){
+		// on ne fait cette action que si la gauge de reproduction est remplie.
+		if (gaugeRepro < 100.0f) {
+			return ;
+		}
+		
+		gaugeRepro = 0.0f;
+		int bbX = x + 10;
+		int bbY = y + 10;
+		
+		Pondeuse.PondreEtre(bbX, bbY, Pondeuse.Espece.HERBE);
 	}
 }
