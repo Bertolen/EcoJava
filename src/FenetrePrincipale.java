@@ -1,10 +1,8 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class FenetrePrincipale extends JFrame {
 	
 	PanneauPrincipal pp;
@@ -22,12 +20,19 @@ public class FenetrePrincipale extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Création du panneau principal
-		pp = Pondeuse.RecupPanneau();
+		pp = Pondeuse.recupPanneau();
 		// Ajout du panneau principal à la fenêtre
 		this.add(pp);
 		
+		// Définition de la taille de la map
+		Pondeuse.fixeLimites(1600, 800);
 		// on créé un être pour le test
-		Pondeuse.PondreEtre(100, 100, Pondeuse.Espece.HERBE);
+		Pondeuse.pondreEtre(100, 100, Pondeuse.Espece.HERBE);
+		Pondeuse.pondreEtre(800, 400, Pondeuse.Espece.MOUTON);
+		Pondeuse.pondreEtre(800, 400, Pondeuse.Espece.MOUTON);
+		Pondeuse.pondreEtre(800, 400, Pondeuse.Espece.MOUTON);
+		Pondeuse.pondreEtre(800, 400, Pondeuse.Espece.MOUTON);
+		Pondeuse.pondreEtre(800, 400, Pondeuse.Espece.MOUTON);
 		
 		// Et enfin, on rends la fenêtre visible
 		this.setVisible(true);

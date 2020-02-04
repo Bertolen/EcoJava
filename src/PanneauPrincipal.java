@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+@SuppressWarnings("serial")
 public class PanneauPrincipal extends JPanel {
 		
 		public PanneauPrincipal() {
@@ -26,22 +27,32 @@ public class PanneauPrincipal extends JPanel {
 			super.paintComponent(g);
 			
 			// Boucle sur tous les etres enregistrés
-			int nbEtres = Pondeuse.NombreEtres();
+			int nbEtres = Pondeuse.nombreEtres();
 			for (int i = 0 ; i < nbEtres ; i++){
-
-				// couleur par défaut (type d'être non identifié)
-				g.setColor(Color.red);
 				
 				// Recuperation de l'etre
-				EtreBio etre = Pondeuse.RecupEtre(i);
+				EtreBio etre = Pondeuse.recupEtre(i);
 				
 				// Recherche de la couleur de l'être
-				if (etre instanceof Herbe) {
+				switch(etre.getEspece()){
+				//l'herbe est verte
+				case HERBE:
 					g.setColor(Color.green);
+					break;
+
+				// Les moutons sont blancs
+				case MOUTON:
+					g.setColor(Color.white);
+					break;
+
+				// couleur par défaut (type d'être non identifié)
+				default:
+					g.setColor(Color.red);
+					break;
 				}
 				
 				// Dessine l'être
-				g.fillOval(etre.getX(), etre.getY(), 50, 50);
+				g.fillOval((int)etre.getPosX(), (int)etre.getPosY(), 15, 15);
 			}
 		}
 	}
