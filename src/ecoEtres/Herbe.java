@@ -13,7 +13,6 @@ public class Herbe extends EtreBio {
 		orientation = (float) Math.PI;
 		vitesse = 0.0f;
 		vitesseRot = 0.0f;
-		especesEnCollision.add(Pondeuse.Espece.HERBE);
 		
 		// Reproduction		
 		densite = 10;
@@ -22,13 +21,14 @@ public class Herbe extends EtreBio {
 		distanceMax = 30;
 		distanceMin = 20;
 		taille = 10;
+		
+		// Pour l'instant on va rendre l'herbe immortelle
+		perteEnergie = 0.0f;
 	}
 
 	@Override
-	protected void Tick() {
-		super.Tick();
-		
-		gaugeRepro += 5.0f;
+	protected void Tick() {		
+		gaugeRepro += calculRatioProgression(20.0f);
 	}
 
 }

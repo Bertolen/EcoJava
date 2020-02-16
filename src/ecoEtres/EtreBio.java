@@ -8,26 +8,41 @@ import javax.swing.Timer;
 
 public abstract class EtreBio {
 
+	// fréquence des ticks
+	protected final int timeStep = 50;
+	
 	// Position et dimensions
 	protected double posX = 0.0d;
 	protected double posY = 0.0d;
-	protected float orientation = 0.0f;
+	protected double orientation = 0.0f;
 	protected float taille = 0.0f;
 	
 	// Déplacement
 	protected float vitesse = 0.0f;
-	protected float vitesseRot = 0.0f;
-	protected ArrayList<Pondeuse.Espece> especesEnCollision = null;
+	protected double vitesseRot = 0.0f;
+	protected ArrayList<Pondeuse.Espece> especesEnCollision = new ArrayList<>();
+	
+	// Besoins
+	protected double gaugeEnergie = 100.0f;
+	protected double gaugeRepro = 0.0f;
+	protected float perteEnergie = 1.0f;
+	protected ArrayList<Pondeuse.Espece> nourritures = new ArrayList<>();
+	protected double seuilFaim = 50.0f;
 	
 	// Reproduction
 	protected int densite = 0;
 	protected float rayonEspacePerso = 30.0f;
-	protected float gaugeRepro = 0.0f;
 	protected float distanceMax = 30.0f;
 	protected float distanceMin = 20.0f;
 	
 	// Tick
 	private Timer timer;
+	
+	// Gestion du temps
+	private long dernierTick = 0;
+	
+	// on est tous la proie de quelqu'un d'autre
+	protected EtreBio proie = null;
 
 	public EtreBio(){
 		this(0, 0);
@@ -38,18 +53,21 @@ public abstract class EtreBio {
 		posX = _x;
 		posY = _y;
 
-		// initialisation des especes avec lesquelles cet être entre en collision
-		especesEnCollision = new ArrayList<>();
+		// toute espèce est en collition avec elle même
+		especesEnCollision.add(getEspece());
 		
 		// Initialisation du Timer pour rafraichir le panneau
 		initTimer();
+		
+		// ceci est techniquement un tick
+		dernierTick = System.currentTimeMillis();
 	}
 
 	// Initialisation du Timer pour rafraichir le panneau
 	private void initTimer() {
-		timer = new Timer(50, new ActionListener(){
+		timer = new Timer(timeStep, new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				Tick();
+				Update();
 			}
 		});
 		timer.start();
@@ -67,16 +85,40 @@ public abstract class EtreBio {
 		return taille;
 	}
 	
-	protected void Tick() {
-		reproduction();	
-		dirige();
-		avance();
+	public double calculRatioProgression (double gauge) {
+		return (System.currentTimeMillis() - dernierTick) / 1000.0d * gauge;
 	}
 	
 	public Pondeuse.Espece getEspece(){
 		if(this instanceof Herbe) return Pondeuse.Espece.HERBE;
 		if(this instanceof Mouton) return Pondeuse.Espece.MOUTON;
 		return Pondeuse.Espece.NIMP;
+	}
+	
+	private void Update() {
+		verfieEnergie();
+		Tick();
+		reproduction();	
+		dirige();
+		avance();
+		dernierTick = System.currentTimeMillis();
+	}
+	
+	protected abstract void Tick();
+
+	protected void verfieEnergie(){
+		// consomation de l'energie passivement
+		gaugeEnergie -= calculRatioProgression(perteEnergie);
+		
+		// si l'être n'a plus d'energie on supprime l'être
+		if(gaugeEnergie <= 0.0f){
+			this.meurs();
+		}
+	}
+	
+	public void meurs() {
+		timer.stop();
+		Pondeuse.supprimeEtre(this);
 	}
 	
 	protected void reproduction(){
@@ -89,7 +131,7 @@ public abstract class EtreBio {
 		gaugeRepro = 0.0f;
 		
 		// On vérifie qu'on a la place de se reproduire
-		if(Pondeuse.nbEtresDansCercle(this.getPosX(), this.getPosY(), rayonEspacePerso, especesEnCollision) > densite){
+		if(Pondeuse.etresDansCercle(this.getPosX(), this.getPosY(), rayonEspacePerso, especesEnCollision).size() > densite){
 			return;
 		}
 		
@@ -114,8 +156,8 @@ public abstract class EtreBio {
 			return;
 		
 		// on calcule le futur emplacement
-		double newPosX = posX + Math.cos(orientation) * vitesse;
-		double newPosY = posY + Math.sin(orientation) * vitesse;
+		double newPosX = posX + Math.cos(orientation) * calculRatioProgression(vitesse);
+		double newPosY = posY + Math.sin(orientation) * calculRatioProgression(vitesse);
 		
 		// on demande à la Pondeuse de nous déplacer (elle vérifie les collisions et les changements de zones
 		Pondeuse.deplaceEtre(this, newPosX, newPosY);

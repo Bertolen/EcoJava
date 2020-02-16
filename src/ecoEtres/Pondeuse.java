@@ -131,17 +131,10 @@ public class Pondeuse {
 		
 		return bonneEspece;
 	}
-	/*
-	// Renvoi le nombre d'Etres dans un cercle
-	public static int nbEtresDansCercle(int x, int y, int r) {
-		ArrayList<Espece> liste = new ArrayList<>();
-		liste.add(Espece.NIMP);
-		return nbEtresDansCercle(x, y, r, liste);
-	}
-	*/
-	// Renvoi le nombre d'Etres d'un espece particulière dans un cercle
-	public static int nbEtresDansCercle(double x, double y, float rayon, ArrayList<Espece> especes) {
-		int nb = 0;
+
+	// Renvoi les Etres d'une espece particulière dans un cercle
+	public static ArrayList<EtreBio> etresDansCercle(double x, double y, float rayon, ArrayList<Espece> especes) {
+		ArrayList<EtreBio> etres = new ArrayList<>();
 		
 		// On parcours tous les êtres de la liste
 		ArrayList<EtreBio> etresProches = etresAProximite(x, y, rayon, especes);
@@ -152,11 +145,11 @@ public class Pondeuse {
 			
 			// Pour chaque être on vérifie la distance qui le sépare du centre de notre cercle
 			if (Point.distance(x, y, etre.getPosX(), etre.getPosY()) <= rayon){
-				nb++;
+				etres.add(etre);
 			}
 		}
 		
-		return nb;
+		return etres;
 	}
 	
 	public static int recupTailleX(){
@@ -208,13 +201,7 @@ public class Pondeuse {
 			zones.get(zoneX).get(zoneY).add(etre);
 		}
 	}
-	/*
-	public static ArrayList<EtreBio> etresAProximite(double x, double y, float portee){
-		ArrayList<Espece> liste = new ArrayList<>();
-		liste.add(Espece.NIMP);
-		return etresAProximite(x, y, portee, liste);
-	}
-	*/
+
 	public static ArrayList<EtreBio> etresAProximite(double x, double y, float portee, ArrayList<Espece> especes){
 		// allocation de la liste en sortie
 		ArrayList<EtreBio> liste = new ArrayList<>();
@@ -278,7 +265,7 @@ public class Pondeuse {
 		if (newPosY >= tailleY) newPosY = tailleY - 1;
 		
 		// on récupère le nombre de collisions à destination (nombre d'êtres à destination moins un, l'être en question)
-		int collisions = nbEtresDansCercle(newPosX, newPosY, (float) etreBio.getTaille(), etreBio.especesEnCollision) - 1;
+		int collisions = etresDansCercle(newPosX, newPosY, (float) etreBio.getTaille(), etreBio.especesEnCollision).size() - 1;
 		
 		// si on a une collision alors on arrête le traitement du déplacement
 		if (collisions > 0) return;
@@ -289,5 +276,12 @@ public class Pondeuse {
 		
 		// on change la zone
 		changeZone(etreBio, newPosX, newPosY);
+	}
+
+	public static void supprimeEtre(EtreBio etre) {
+		listeEtres.remove(etre);
+		int zoneX = (int)(etre.getPosX() / tailleZone);
+		int zoneY = (int)(etre.getPosY() / tailleZone);
+		zones.get(zoneX).get(zoneY).remove(etre);
 	}
 }
