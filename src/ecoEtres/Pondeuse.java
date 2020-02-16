@@ -10,7 +10,7 @@ import ecoIhm.PanneauPrincipal;
 public class Pondeuse {
 	
 	public enum Espece {
-		NIMP, HERBE, MOUTON
+		NIMP, HERBE, MOUTON, LOUP
 	}
 	
 	private static ArrayList<EtreBio> listeEtres = null;
@@ -68,6 +68,11 @@ public class Pondeuse {
 			etre = new Mouton(_x,_y);
 			break;
 			
+		// Creation d'un être de type loup
+		case LOUP:
+			etre = new Loup(_x,_y);
+			break;
+			
 		// pas de création d'être 	
 		default:
 			break;
@@ -123,6 +128,10 @@ public class Pondeuse {
 			
 		case MOUTON:
 			bonneEspece = etre instanceof Herbe;
+			break;
+			
+		case LOUP:
+			bonneEspece = etre instanceof Loup;
 			break;
 			
 		default:
@@ -270,12 +279,12 @@ public class Pondeuse {
 		// si on a une collision alors on arrête le traitement du déplacement
 		if (collisions > 0) return;
 		
+		// on change la zone
+		changeZone(etreBio, newPosX, newPosY);
+		
 		// on change l'emplacement de l'être
 		etreBio.posX = newPosX;
 		etreBio.posY = newPosY;
-		
-		// on change la zone
-		changeZone(etreBio, newPosX, newPosY);
 	}
 
 	public static void supprimeEtre(EtreBio etre) {

@@ -26,6 +26,7 @@ public abstract class EtreBio {
 	protected double gaugeEnergie = 100.0f;
 	protected double gaugeRepro = 0.0f;
 	protected float perteEnergie = 1.0f;
+	protected float gainEnergie = 1.0f;
 	protected ArrayList<Pondeuse.Espece> nourritures = new ArrayList<>();
 	protected double seuilFaim = 50.0f;
 	
@@ -92,6 +93,7 @@ public abstract class EtreBio {
 	public Pondeuse.Espece getEspece(){
 		if(this instanceof Herbe) return Pondeuse.Espece.HERBE;
 		if(this instanceof Mouton) return Pondeuse.Espece.MOUTON;
+		if(this instanceof Loup) return Pondeuse.Espece.LOUP;
 		return Pondeuse.Espece.NIMP;
 	}
 	

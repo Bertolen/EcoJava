@@ -50,6 +50,11 @@ public class PanneauPrincipal extends JPanel {
 					g.setColor(Color.white);
 					break;
 
+					// Les moutons sont gris
+				case LOUP:
+					g.setColor(Color.gray);
+					break;
+
 				// couleur par défaut (type d'être non identifié)
 				default:
 					g.setColor(Color.red);

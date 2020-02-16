@@ -17,6 +17,26 @@ public abstract class Animal extends EtreBio {
 
 	public Animal(int _x, int _y) {
 		super(_x, _y);
+		
+		// Position
+		orientation = (float) Math.PI;
+		vitesse = 30.0f;
+		vitesseRot = Math.PI;
+		
+		// Reproduction
+		densite = 0;
+		rayonEspacePerso = 30;
+		gaugeRepro = 0;
+		distanceMax = 30;
+		distanceMin = 20;
+		taille = 20;
+		
+		// comportement initial
+		comportement = Comportement.DEAMBULE;
+		
+		// energie
+		seuilFaim = 90.0f;
+		gainEnergie = 1.0f;
 	}
 	
 	@Override
@@ -67,7 +87,7 @@ public abstract class Animal extends EtreBio {
 		if(distanceProie <= taille) {
 			proie.meurs();
 			proie = null;
-			gaugeEnergie += 1.0f;
+			gaugeEnergie = Math.min(gaugeEnergie + gainEnergie, 100.0d);
 		}
 	}
 
@@ -89,7 +109,7 @@ public abstract class Animal extends EtreBio {
 	protected void Tick() {
 
 		// si le mouton manque d'energie il cherche à se nourir
-		if (gaugeEnergie <= seuilFaim) {
+		if (gaugeEnergie <= seuilFaim && comportement != Comportement.MANGE) {
 			comportement = Comportement.MANGE;
 		} else {
 			comportement = Comportement.DEAMBULE;

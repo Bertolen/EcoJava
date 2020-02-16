@@ -10,23 +10,12 @@ public class Mouton extends Animal {
 		super(_x, _y);
 		
 		// Position
-		orientation = (float) Math.PI;
-		vitesse = 30.0f;
-		vitesseRot = Math.PI;
-		
-		// Reproduction
-		densite = 0;
-		rayonEspacePerso = 30;
-		gaugeRepro = 0;
-		distanceMax = 30;
-		distanceMin = 20;
-		taille = 20;
-		
-		// comportement initial
-		comportement = Comportement.DEAMBULE;
+		vitesse = 40.0f;
+		vitesseRot = Math.PI * 2;
 		
 		// energie
 		nourritures.add(Pondeuse.Espece.HERBE);
 		seuilFaim = 90.0f;
+		gainEnergie = 1.0f;
 	}
 }

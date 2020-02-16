@@ -34,5 +34,6 @@ public class Main {
 		Pondeuse.pondreEtre(250, 250, Pondeuse.Espece.MOUTON);
 		Pondeuse.pondreEtre(150, 250, Pondeuse.Espece.MOUTON);
 		Pondeuse.pondreEtre(250, 150, Pondeuse.Espece.MOUTON);
+		Pondeuse.pondreEtre(350, 350, Pondeuse.Espece.LOUP);
 	}
 }
