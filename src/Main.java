@@ -8,9 +8,6 @@ public class Main {
 		// création de la fenêtre
 		FenetrePrincipale FP = new FenetrePrincipale();
 		
-		// Définit sa taille
-		FP.setSize(1600, 800);
-		
 		// Définition de la taille de la map
 		Pondeuse.fixeLimites(FP);
 		
